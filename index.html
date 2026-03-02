@@ -84,7 +84,46 @@ footer { text-align:center; padding:30px 0; opacity:0.6; font-size:0.9rem; }
 @keyframes gradientAnim { 0% { background-position:0% 50%; } 50% { background-position:100% 50%; } 100% { background-position:0% 50%; } }
 h1 { background-size: 200% 200%; animation: gradientAnim 6s ease infinite; }
 
+
+/*Per rendere le icone della sezione contact, coerenti con il resto del design */
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.contact-links a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #00f5ff; /* Colore ciano coerente con il brand */
+  transition: 0.3s ease;
+}
+
+.contact-links a i {
+  width: 32px;
+  height: 32px;
+  stroke-width: 1.5;
+}
+
+.contact-links a span {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.contact-links a:hover {
+  color: #fff;
+  filter: drop-shadow(0 0 8px #00f5ff); /* Effetto glow coordinato */
+  transform: translateY(-5px);
+}
+
 </style>
+<script src="https://unpkg.com/lucide@latest"></script>
+
 </head>
 <body>
 
@@ -133,11 +172,20 @@ h1 { background-size: 200% 200%; animation: gradientAnim 6s ease infinite; }
 <!-- CONTACT / SOCIAL -->
 <section id="contact" class="contact">
   <h2>Contact</h2>
-  <p>Collegati con me:</p>
-  <div>
-    <a href="https://www.linkedin.com/in/raffaeledileo/" target="_blank" aria-label="LinkedIn">🔗</a>
-    <a href="https://github.com/raffaele-ai-84" target="_blank" aria-label="GitHub">🐱</a>
-    <a href="mailto:rdileo84@gmail.com" aria-label="Email">✉️</a>
+  <p>Connettiamoci per esplorare nuove pipeline intelligenti.</p>
+  <div class="contact-links">
+    <a href="https://www.linkedin.com/in/raffaeledileo/" target="_blank" aria-label="LinkedIn">
+      <i data-lucide="linkedin"></i>
+      <span>LinkedIn</span>
+    </a>
+    <a href="https://github.com/raffaele-ai-84" target="_blank" aria-label="GitHub">
+      <i data-lucide="github"></i>
+      <span>GitHub</span>
+    </a>
+    <a href="mailto:rdileo84@gmail.com" aria-label="Email">
+      <i data-lucide="mail"></i>
+      <span>Email</span>
+    </a>
   </div>
 </section>
 
@@ -268,6 +316,10 @@ const sectionObserver = new IntersectionObserver(entries=>{
   entries.forEach(entry=>{ if(entry.isIntersecting) entry.target.classList.add('visible'); });
 }, {threshold:0.2});
 document.querySelectorAll('section').forEach(s=>sectionObserver.observe(s));
+
+/** disegnare" le icone Contact Section**/
+lucide.createIcons();
+
 </script>
 
 </body>
