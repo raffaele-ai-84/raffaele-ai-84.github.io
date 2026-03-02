@@ -4,6 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raffaele Di Leo | AI Engineer</title>
+  
+  <!-- SEO & Social -->
+  <meta name="description" content="Raffaele Di Leo, AI Engineer specializzato in infrastrutture intelligenti, automazione e modelli generativi.">
+  <meta name="keywords" content="AI Engineer, Generative Systems, Infrastructure Automation, Machine Learning, DevOps">
+  <meta name="author" content="Raffaele Di Leo">
+
+  <meta property="og:title" content="Raffaele Di Leo | AI Engineer">
+  <meta property="og:description" content="AI Infrastructure Engineer specializzato in Generative AI e automazione.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="link-to-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+
   <style>
     /* RESET E BASE STILI */
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; font-family:Consolas, monospace; }
@@ -23,14 +35,14 @@
     /* HERO SECTION */
     .hero { display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; text-align:center; gap:20px; }
     .typing { font-size:1.2rem; color:#aaa; min-height:1.5em; }
-    .btn { display:inline-block; padding:12px 28px; border:1px solid #00f5ff; color:#00f5ff; text-decoration:none; margin:10px; transition:0.3s; border-radius:6px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; padding:12px 28px; border:1px solid #00f5ff; color:#00f5ff; text-decoration:none; margin:10px; transition:0.3s; border-radius:6px; gap:8px; }
     .btn:hover { background:#00f5ff; color:#000; box-shadow:0 0 20px #00f5ff; }
 
     /* ABOUT */
     .about p { max-width:800px; margin:0 auto; text-align:center; font-size:1rem; }
 
     /* TERMINAL */
-    .terminal { background:#111; padding:20px; border:1px solid #00f5ff; border-radius:8px; margin-top:20px; min-height:200px; font-size:0.95rem; }
+    .terminal { background:#111; padding:20px; border:1px solid #00f5ff; border-radius:8px; margin-top:20px; min-height:200px; font-size:0.95rem; font-family:monospace; }
     .terminal-line { margin-bottom:10px; color:#00ff88; opacity:0; transform: translateX(-20px); transition: all 0.5s ease-out; }
 
     /* PROJECT GRID */
@@ -43,7 +55,29 @@
     footer { text-align:center; padding:30px 0; opacity:0.6; font-size:0.9rem; }
 
     /* RESPONSIVE */
-    @media(max-width:768px){ h1{font-size:2rem;} .typing{font-size:1rem;} }
+    @media(max-width:768px){ 
+      h1{font-size:2rem;} 
+      .typing{font-size:1rem;} 
+      section { padding:60px 5%; }
+    }
+
+    @media(max-width:480px){
+      .btn { padding:10px 20px; font-size:0.9rem; }
+      .typing { font-size:0.9rem; }
+    }
+
+    /* PREFERS REDUCED MOTION */
+    @media (prefers-reduced-motion: reduce) {
+      section, .terminal-line, .card { transition: none !important; transform: none !important; opacity:1 !important; }
+    }
+
+    /* GRADIENT ANIMATO HERO (OPTIONAL) */
+    @keyframes gradientAnim {
+      0% { background-position:0% 50%; }
+      50% { background-position:100% 50%; }
+      100% { background-position:0% 50%; }
+    }
+    h1 { background-size: 200% 200%; animation: gradientAnim 6s ease infinite; }
   </style>
 </head>
 <body>
@@ -52,9 +86,9 @@
   <canvas id="network"></canvas>
 
   <!-- HERO -->
-  <section class="hero">
+  <section class="hero" role="banner">
     <h1>AI Infrastructure Engineer</h1>
-    <div class="typing" id="typing"></div>
+    <div class="typing" id="typing" aria-live="polite"></div>
     <div>
       <a href="#projects" class="btn">View Projects</a>
       <a href="cv.pdf" class="btn" download>Download CV</a>
@@ -62,7 +96,7 @@
   </section>
 
   <!-- ABOUT -->
-  <section class="about">
+  <section class="about" role="main">
     <h2>About</h2>
     <p>
       System Administrator evoluto in AI Engineer. Progetto infrastrutture intelligenti, integro modelli generativi
@@ -83,24 +117,39 @@
   </section>
 
   <!-- FOOTER -->
-  <footer>
+  <footer role="contentinfo">
     © 2026 Raffaele Di Leo — AI Driven Systems
   </footer>
 
   <script>
-    /* TYPING EFFECT */
-    const text = "AI Automation | Generative Systems | Infrastructure Optimization";
-    let i = 0;
-    function typing() {
-      if(i<text.length){
-        document.getElementById("typing").innerHTML += text.charAt(i);
-        i++;
-        setTimeout(typing,40);
+    /* ===== TYPING EFFECT CICLICO ===== */
+    const phrases = ["AI Automation", "Generative Systems", "Infrastructure Optimization"];
+    const typingDiv = document.getElementById("typing");
+    let phraseIndex = 0, charIndex = 0;
+    function type() {
+      const current = phrases[phraseIndex];
+      if(charIndex < current.length){
+        typingDiv.innerHTML += current.charAt(charIndex);
+        charIndex++;
+        requestAnimationFrame(type);
+      } else {
+        setTimeout(() => erase(), 1500);
       }
     }
-    typing();
+    function erase() {
+      const current = phrases[phraseIndex];
+      if(charIndex > 0){
+        typingDiv.innerHTML = current.substring(0,charIndex-1);
+        charIndex--;
+        requestAnimationFrame(erase);
+      } else {
+        phraseIndex = (phraseIndex+1) % phrases.length;
+        setTimeout(type, 500);
+      }
+    }
+    type();
 
-    /* DYNAMIC PROJECTS */
+    /* ===== DYNAMIC PROJECTS ===== */
     const projects = [
       { title:"AI Workflow Lab", desc:"Pipeline generative locali ottimizzate GPU." },
       { title:"Infrastructure AI Monitoring", desc:"Monitoraggio predittivo con modelli ML." },
@@ -114,26 +163,31 @@
       grid.appendChild(card);
     });
 
-    /* PARTICLE NETWORK */
+    /* ===== PARTICLE NETWORK OTTIMIZZATO ===== */
     const canvas=document.getElementById("network");
     const ctx=canvas.getContext("2d");
     function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
     window.addEventListener('resize',resizeCanvas);
     resizeCanvas();
+
     let particles=[];
-    for(let i=0;i<80;i++){
+    const particleCount = Math.min(80, Math.floor(window.innerWidth/10));
+    for(let i=0;i<particleCount;i++){
       particles.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5});
     }
+
     function draw(){
       ctx.clearRect(0,0,canvas.width,canvas.height);
       particles.forEach(p=>{
         p.x+=p.vx; p.y+=p.vy;
+        if(p.x<0 || p.x>canvas.width) p.vx*=-1;
+        if(p.y<0 || p.y>canvas.height) p.vy*=-1;
         ctx.beginPath();
         ctx.arc(p.x,p.y,2,0,Math.PI*2);
         ctx.fillStyle="#00f5ff"; ctx.fill();
       });
       for(let a=0;a<particles.length;a++){
-        for(let b=a;b<particles.length;b++){
+        for(let b=a+1;b<particles.length;b++){
           let dx=particles[a].x-particles[b].x;
           let dy=particles[a].y-particles[b].y;
           let dist=Math.sqrt(dx*dx+dy*dy);
@@ -150,7 +204,7 @@
     }
     draw();
 
-    /* TERMINAL SEQUENZIALE */
+    /* ===== TERMINAL SEQUENZIALE ===== */
     const terminalLines = [
       "Booting AI Core...",
       "Loading neural modules...",
@@ -164,13 +218,10 @@
         line.className="terminal-line";
         line.textContent="> "+terminalLines[index];
         terminalDiv.appendChild(line);
-        // sequenziale fade-in
         setTimeout(()=>{line.style.opacity=1; line.style.transform="translateX(0)";},50);
         setTimeout(()=>showTerminalLine(index+1),400);
       }
     }
-
-    // avvia terminal sequenziale quando entra in viewport
     const terminalObserver = new IntersectionObserver(entries=>{
       entries.forEach(entry=>{
         if(entry.isIntersecting){ showTerminalLine(0); terminalObserver.unobserve(entry.target); }
@@ -178,7 +229,7 @@
     }, {threshold:0.3});
     terminalObserver.observe(terminalDiv);
 
-    /* CARDS SEQUENZIALI */
+    /* ===== CARDS SEQUENZIALI ===== */
     const cardObserver = new IntersectionObserver(entries=>{
       entries.forEach(entry=>{
         if(entry.isIntersecting){
@@ -190,7 +241,7 @@
     }, {threshold:0.3});
     cardObserver.observe(document.getElementById('projects'));
 
-    /* SECTION GENERIC FADE-IN */
+    /* ===== SECTION GENERIC FADE-IN ===== */
     const sectionObserver = new IntersectionObserver(entries=>{
       entries.forEach(entry=>{ if(entry.isIntersecting) entry.target.classList.add('visible'); });
     }, {threshold:0.2});
